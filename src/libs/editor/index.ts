@@ -1,21 +1,10 @@
 import { Content } from "../../type/index";
 import { generateId } from "../id/index";
 
-export class Article {
-  private _title: string = "";
+export class MarkdownEditor {
   private _contents: Content[] = [];
 
-  private readonly titleListener: Set<() => void> = new Set();
   private readonly contentsListener: Set<() => void> = new Set();
-
-  public get title(): string {
-    return this._title;
-  }
-
-  private set title(value: string) {
-    this._title = value;
-    this.titleListener.forEach((listener) => listener());
-  }
 
   public get contents(): Content[] {
     return this._contents;
@@ -27,13 +16,27 @@ export class Article {
   }
 
   /**
+   * 파일을 추가하는 경우 사용됩니다.
+   *
+   * @param url 외부 Storage에 업로드 이후 받아온 이미지의 주소
+   */
+  public addFile = (url: string) => {
+    const value = {
+      id: generateId(),
+      url: url,
+    };
+
+    this.contents = [...this._contents, value];
+  };
+
+  /**
    * 유저가 엔터를 입력한 경우 사용됩니다.
-   * 새로운 content 아이템이 추가됩니다.
+   * enter를 누른 경우는 TextContent 타입으로 캐스팅됩니다.
    */
   public enter = () => {
     const value = {
       id: generateId(),
-      content: "",
+      text: "",
     };
 
     this.contents = [...this._contents, value];
@@ -75,14 +78,6 @@ export class Article {
 
     return () => {
       this.contentsListener.delete(listener);
-    };
-  };
-
-  public subscribeTitle = (listener: () => void) => {
-    this.titleListener.add(listener);
-
-    return () => {
-      this.titleListener.delete(listener);
     };
   };
 }
