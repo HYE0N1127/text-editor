@@ -5,7 +5,7 @@ export const useMarkdownEditor = () => {
   const article = useContext(MarkdownEditorContext);
 
   if (article == null) {
-    throw new Error("useArticle must used in ArticleProvider");
+    throw new Error("useMarkdownEditor must used in MarkdownEditorProvider");
   }
 
   return article;
@@ -14,8 +14,5 @@ export const useMarkdownEditor = () => {
 export const useMarkdownContents = () => {
   const context = useMarkdownEditor();
 
-  return useSyncExternalStore(
-    context.subscribeContents,
-    () => context.contents,
-  );
+  return useSyncExternalStore(context.subscribe, () => context.blocks);
 };
