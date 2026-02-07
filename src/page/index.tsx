@@ -1,6 +1,7 @@
 import ContentEditor from "../components/write/content/index";
 import TitleEditor from "../components/write/title/index";
 import { IsFocusProvider } from "../components/context/focus/index";
+import EditorBlockCreator from "../components/write/button/index";
 
 export const EditorPage = () => {
   return (
@@ -10,6 +11,7 @@ export const EditorPage = () => {
           <TitleEditor />
 
           <ContentEditor />
+          <EditorBlockCreator />
         </IsFocusProvider>
       </div>
     </div>

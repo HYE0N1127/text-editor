@@ -1,0 +1,20 @@
+import { generateId } from "../../../libs/id/index";
+import { useMarkdownEditor } from "../../context/editor/hooks";
+import { useFocusBlock } from "../../context/focus/hooks";
+
+const EditorBlockCreator = () => {
+  const { enter, getLastId } = useMarkdownEditor();
+  const { changeFocus } = useFocusBlock();
+
+  const handleEnter = () => {
+    const id = generateId();
+    const prev = getLastId();
+
+    changeFocus(id);
+    enter({ next: id, prev: prev });
+  };
+
+  return <button className="bg-transparent w-full h-4" onClick={handleEnter} />;
+};
+
+export default EditorBlockCreator;

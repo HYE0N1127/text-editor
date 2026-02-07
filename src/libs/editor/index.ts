@@ -75,11 +75,26 @@ export class MarkdownEditor {
    *
    * @return 삭제될 블럭 이전의 아이디
    */
-  public getPrevId = (id: string): string | null => {
+  public getPrevId = (id: string): string | undefined => {
     const index = this._blocks.findIndex((block) => block.id === id);
 
     if (index === -1) {
-      return null;
+      return undefined;
+    }
+
+    return this._blocks[index].id;
+  };
+
+  /**
+   * add button을 통하여 아이템을 추가하는 경우, 마지막에 아이템을 추가해야 하기에 prev의 아이디 사용 목적으로 마지막 아이디를 가져옵니다.
+   *
+   * @returns 마지막 배열의 아이템의 아이디를 받아옵니다.
+   */
+  public getLastId = (): string | undefined => {
+    const index = this._blocks.length - 1;
+
+    if (index === -1) {
+      return undefined;
     }
 
     return this._blocks[index].id;

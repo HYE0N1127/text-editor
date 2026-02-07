@@ -9,7 +9,7 @@ export const useFocusBlock = () => {
   }
 
   const changeFocus = useCallback(
-    (id: string | null) => {
+    (id: string | undefined) => {
       ref.current = id;
     },
     [ref],

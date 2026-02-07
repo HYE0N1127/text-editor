@@ -1,5 +1,5 @@
 import { createContext, RefObject } from "react";
 
-export const FocusBlockContext = createContext<RefObject<string | null> | null>(
-  null,
-);
+export const FocusBlockContext = createContext<
+  RefObject<string | undefined> | undefined
+>(undefined);
