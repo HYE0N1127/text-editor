@@ -1,17 +1,31 @@
 export type Article = {
   title: string;
-  contents: Content[];
+  contents: Block[];
   tag?: string[];
 };
 
-export type Content = (TextContent | ImageContent) & {
+export type BlockType = "text" | "image" | "h1" | "h2" | "h3" | "code";
+
+type Base = {
   id: string;
 };
 
-export type TextContent = {
-  text: string;
+export type TextBlock = Base & {
+  type: "text" | "h1" | "h2" | "h3";
+  value: string;
 };
 
-export type ImageContent = {
-  url: string;
+export type ImageBlock = Base & {
+  type: "image";
+  value: string;
+  width?: number;
+  height?: number;
 };
+
+export type CodeBlock = Base & {
+  type: "code";
+  value: string;
+  language: string;
+};
+
+export type Block = TextBlock | ImageBlock | CodeBlock;
