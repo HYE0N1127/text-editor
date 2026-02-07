@@ -1,45 +1,105 @@
-import { Content } from "../../type/index";
+import { Block, ImageBlock, TextBlock } from "../../type/index";
 import { generateId } from "../id/index";
 
 export class MarkdownEditor {
-  private _contents: Content[] = [];
+  private _blocks: Block[] = [];
 
-  private readonly contentsListener: Set<() => void> = new Set();
+  private readonly blockListeners: Set<() => void> = new Set();
 
-  public get contents(): Content[] {
-    return this._contents;
+  public get blocks(): Block[] {
+    return this._blocks;
   }
 
-  private set contents(value: Content[]) {
-    this._contents = [...value];
-    this.contentsListener.forEach((listener) => listener());
+  private set blocks(value: Block[]) {
+    this._blocks = [...value];
+    this.blockListeners.forEach((listener) => listener());
   }
 
   /**
    * 파일을 추가하는 경우 사용됩니다.
+   * ImageBlock을 생성하여 추가합니다.
    *
    * @param url 외부 Storage에 업로드 이후 받아온 이미지의 주소
    */
   public addFile = (url: string) => {
-    const value = {
+    const newBlock: ImageBlock = {
       id: generateId(),
-      url: url,
+      type: "image",
+      value: url,
     };
 
-    this.contents = [...this._contents, value];
+    this.blocks = [...this._blocks, newBlock];
   };
 
   /**
    * 유저가 엔터를 입력한 경우 사용됩니다.
-   * enter를 누른 경우는 TextContent 타입으로 캐스팅됩니다.
+   *
+   * @param next? 새로 생성될 블록의 id
+   * @param prev? 기준이 되는 이전 블록의 id (없으면 맨 앞에 추가)
    */
-  public enter = () => {
-    const value = {
-      id: generateId(),
-      text: "",
+  public enter = (option: { next?: string; prev?: string } = {}) => {
+    const { next, prev } = option;
+
+    const id = next || generateId();
+
+    const block: TextBlock = {
+      id: id,
+      type: "text",
+      value: "",
     };
 
-    this.contents = [...this._contents, value];
+    // 기준이 되는 블럭의 아이디가 존재하지 않으면 맨 앞에 삽입합니다.
+    if (prev == null) {
+      this.blocks = [block, ...this._blocks];
+      return;
+    }
+
+    const index = this._blocks.findIndex((block) => block.id === prev);
+
+    // 기준 블럭을 찾지 못하는 경우 맨 뒤에 추가합니다.
+    if (index === -1) {
+      this.blocks = [...this._blocks, block];
+      return;
+    }
+
+    const update = [...this._blocks];
+    update.splice(index + 1, 0, block);
+
+    this.blocks = update;
+  };
+
+  /**
+   * 블럭을 삭제하고, 이전의 아이템에 포커싱을 줘야 하는 경우 사용됩니다.
+   *
+   * @param id 삭제될 블럭의 아이디
+   *
+   * @return 삭제될 블럭 이전의 아이디
+   */
+  public getPrevId = (id: string): string | null => {
+    const index = this._blocks.findIndex((block) => block.id === id);
+
+    if (index === -1) {
+      return null;
+    }
+
+    return this._blocks[index].id;
+  };
+
+  /**
+   * 특정 블록의 데이터를 업데이트합니다.
+   *
+   * * @param id 업데이트할 블록의 id
+   * @param data 변경할 데이터 (Partial)
+   */
+  public updateBlock = (id: string, data: Partial<Block>) => {
+    const updatedBlocks = this._blocks.map((block) => {
+      if (block.id === id) {
+        return { ...block, ...data } as Block;
+      }
+      return block;
+    });
+
+    this.blocks = updatedBlocks;
   };
 
   /**
@@ -47,10 +107,10 @@ export class MarkdownEditor {
    *
    * @param id : 삭제할 칸의 id
    */
-  public delete = (id: string) => {
-    const update = this._contents.filter((content) => content.id !== id);
+  public deleteBlock = (id: string) => {
+    const update = this._blocks.filter((block) => block.id !== id);
 
-    this._contents = update;
+    this.blocks = update;
   };
 
   /**
@@ -60,24 +120,26 @@ export class MarkdownEditor {
    * @param overId : 가장 근처에 존재하는 아이템의 id
    */
   public moveTo = (activeId: string, overId: string) => {
-    const active = this._contents.find((content) => content.id === activeId);
-    if (active == null) return;
+    const activeIndex = this._blocks.findIndex(
+      (block) => block.id === activeId,
+    );
+    const overIndex = this._blocks.findIndex((block) => block.id === overId);
 
-    const update = this._contents.filter((content) => content.id !== activeId);
-    const over = update.findIndex((content) => content.id === overId);
+    if (activeIndex === -1 || overIndex === -1 || activeIndex === overIndex)
+      return;
 
-    if (over === -1) return;
+    const update = [...this._blocks];
+    const [movedItem] = update.splice(activeIndex, 1);
+    update.splice(overIndex, 0, movedItem);
 
-    update.splice(over, 0, active);
-
-    this.contents = update;
+    this.blocks = update;
   };
 
-  public subscribeContents = (listener: () => void) => {
-    this.contentsListener.add(listener);
+  public subscribe = (listener: () => void) => {
+    this.blockListeners.add(listener);
 
     return () => {
-      this.contentsListener.delete(listener);
+      this.blockListeners.delete(listener);
     };
   };
 }
