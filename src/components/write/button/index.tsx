@@ -1,10 +1,10 @@
 import { generateId } from "../../../libs/id/index";
 import { useMarkdownEditor } from "../../context/editor/hooks";
-import { useFocusBlock } from "../../context/focus/hooks";
+import { useFocusContext } from "../../context/focus/hooks";
 
 const EditorBlockCreator = () => {
   const { enter, getLastId } = useMarkdownEditor();
-  const { changeFocus } = useFocusBlock();
+  const { changeFocus } = useFocusContext();
 
   const handleEnter = () => {
     const id = generateId();

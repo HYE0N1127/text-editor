@@ -1,5 +1,4 @@
-import { createContext, RefObject } from "react";
+import { createContext } from "react";
+import { Focus } from "../../../libs/focus/index";
 
-export const FocusBlockContext = createContext<
-  RefObject<string | undefined> | undefined
->(undefined);
+export const FocusBlockContext = createContext<Focus | null>(null);

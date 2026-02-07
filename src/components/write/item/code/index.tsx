@@ -1,15 +1,15 @@
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { Block, CodeBlock as CodeBlockType } from "../../../../type/index";
+import { useMarkdownEditor } from "../../../context/editor/hooks";
+import { generateId } from "../../../../libs/id/index";
+import { useFocusContext } from "../../../context/focus/hooks";
 
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-css";
 import "prismjs/components/prism-cshtml";
 import "prismjs/themes/prism-okaidia.css";
-import { useMarkdownEditor } from "../../../context/editor/hooks";
-import { generateId } from "../../../../libs/id/index";
-import { useFocusBlock } from "../../../context/focus/hooks";
 
 interface Props {
   block: Block;
@@ -17,7 +17,7 @@ interface Props {
 
 const CodeBlock = ({ block }: Props) => {
   const { updateBlock, enter } = useMarkdownEditor();
-  const { changeFocus } = useFocusBlock();
+  const { changeFocus } = useFocusContext();
 
   const language = (block as CodeBlockType).language || "javascript";
 

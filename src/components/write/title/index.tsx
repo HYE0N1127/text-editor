@@ -1,9 +1,9 @@
 import { generateId } from "../../../libs/id/index";
 import { useMarkdownEditor } from "../../context/editor/hooks";
-import { useFocusBlock } from "../../context/focus/hooks";
+import { useFocusContext } from "../../context/focus/hooks";
 
 const TitleEditor = () => {
-  const { changeFocus } = useFocusBlock();
+  const { changeFocus } = useFocusContext();
   const { enter } = useMarkdownEditor();
 
   return (
@@ -25,8 +25,8 @@ const TitleEditor = () => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             const id = generateId();
-            changeFocus(id);
 
+            changeFocus(id);
             enter({ next: id });
           }
         }}

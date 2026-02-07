@@ -1,22 +1,23 @@
-import { useContext, useCallback } from "react";
+import { useContext, useSyncExternalStore } from "react";
 import { FocusBlockContext } from "./contexts";
 
-export const useFocusBlock = () => {
-  const ref = useContext(FocusBlockContext);
+export const useFocusContext = () => {
+  const context = useContext(FocusBlockContext);
 
-  if (!ref) {
-    throw new Error("useFocusBlock must be used within IsFocusProvider");
+  if (context == null) {
+    throw new Error("useFocusContext must used in FocusProvider");
   }
 
-  const changeFocus = useCallback(
-    (id: string | undefined) => {
-      ref.current = id;
-    },
-    [ref],
+  return context;
+};
+
+export const useIsFocus = (id?: string) => {
+  const context = useFocusContext();
+
+  const currentFocus = useSyncExternalStore(
+    context.subscribe,
+    () => context.focusId,
   );
 
-  return {
-    focusId: ref.current,
-    changeFocus,
-  };
+  return currentFocus === id;
 };

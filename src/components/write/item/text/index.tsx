@@ -2,11 +2,12 @@ import { useEffect, useRef } from "react";
 import { Block, BlockType } from "../../../../type/index";
 import { useMarkdownEditor } from "../../../context/editor/hooks";
 import { generateId } from "../../../../libs/id/index";
-import { useFocusBlock } from "../../../context/focus/hooks";
 import { getTextStyle, resizeTextarea } from "../helpers";
+import { useFocusContext } from "../../../context/focus/hooks";
 
 type Props = {
   block: Block;
+  isFocus: boolean;
 };
 
 const MARKDOWN_RULES: Record<string, BlockType> = {
@@ -16,12 +17,11 @@ const MARKDOWN_RULES: Record<string, BlockType> = {
   "```": "code",
 };
 
-const TextBlock = ({ block }: Props) => {
+const TextBlock = ({ block, isFocus }: Props) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const { changeFocus } = useFocusContext();
   const { deleteBlock, updateBlock, enter, getPrevId } = useMarkdownEditor();
-  const { focusId, changeFocus } = useFocusBlock();
-  const isFocus = focusId === block.id;
 
   // textarea는 자동으로 높이 변경이 일어나지 않기에, 값이 변경되는 시점마다 높이를 계산합니다.
   useEffect(() => {
@@ -31,7 +31,11 @@ const TextBlock = ({ block }: Props) => {
   // 포커싱 대상이 된다면 DOM에 포커스를 줍니다.
   useEffect(() => {
     if (isFocus && textareaRef.current) {
-      textareaRef.current.focus();
+      const element = textareaRef.current;
+      element.focus();
+
+      const length = element.value.length;
+      element.setSelectionRange(length, length);
     }
   }, [isFocus]);
 
@@ -100,9 +104,12 @@ const TextBlock = ({ block }: Props) => {
             e.preventDefault();
 
             const prev = getPrevId(block.id);
-            changeFocus(prev);
 
             deleteBlock(block.id);
+            setTimeout(() => {
+              changeFocus(prev);
+            }, 0);
+            // deleteBlock(block.id);
           }
 
           // 엔터를 클릭한 경우 새로운 블럭을 생성하고, 새롭게 생성되는 블럭에 포커싱을 가합니다.

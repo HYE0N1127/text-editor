@@ -82,7 +82,7 @@ export class MarkdownEditor {
       return undefined;
     }
 
-    return this._blocks[index].id;
+    return this._blocks[index - 1].id;
   };
 
   /**
