@@ -22,13 +22,12 @@ const BlockInput = ({ id, value, type }: Props) => {
     resizeTextarea(textareaRef.current);
   }, [value]);
 
-  // 2. 포커스 동기화
   useEffect(() => {
     if (isFocus && textareaRef.current) {
       const element = textareaRef.current;
       if (document.activeElement !== element) {
         element.focus();
-        // 커서를 항상 끝으로
+
         const length = element.value.length;
         element.setSelectionRange(length, length);
       }
@@ -64,21 +63,29 @@ const BlockInput = ({ id, value, type }: Props) => {
 
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      const newId = generateId();
-      changeFocus(newId);
-      enter({ next: newId, prev: id });
+
+      const update = generateId();
+
+      changeFocus(update);
+      enter({ next: update, prev: id });
     }
 
     if (e.key === "Backspace" && value === "") {
       if (type !== "text") {
         e.preventDefault();
+
         updateBlock(id, { type: "text" });
         return;
       }
       if (type === "text") {
         e.preventDefault();
+
         const prevId = getPrevId(id);
-        if (prevId) changeFocus(prevId);
+
+        if (prevId) {
+          changeFocus(prevId);
+        }
+
         deleteBlock(id);
       }
     }

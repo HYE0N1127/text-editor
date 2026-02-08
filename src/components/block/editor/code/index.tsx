@@ -1,4 +1,4 @@
-import Editor from "react-simple-code-editor"; // 이 라이브러리는 에디터 모드에서만 로드됨
+import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { useEffect, useRef } from "react";
 import { CodeBlock as CodeBlockType } from "../../../../type/index";

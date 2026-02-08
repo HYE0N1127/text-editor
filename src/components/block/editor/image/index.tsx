@@ -25,14 +25,17 @@ const ImageEditor = ({ id }: Props) => {
 
     if (e.key === "Backspace" || e.key === "Delete") {
       e.preventDefault();
+
       deleteBlock(id);
     }
 
     if (e.key === "Enter") {
       e.preventDefault();
-      const newId = generateId();
-      enter({ next: newId, prev: id });
-      changeFocus(newId);
+
+      const update = generateId();
+
+      enter({ next: update, prev: id });
+      changeFocus(update);
     }
   };
 
