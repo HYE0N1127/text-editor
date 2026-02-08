@@ -1,4 +1,4 @@
-import { Block } from "../../../type/index";
+import { Block, BlockType } from "../../../type/index";
 
 export const resizeTextarea = (ref: HTMLTextAreaElement | null) => {
   if (ref) {
@@ -7,8 +7,8 @@ export const resizeTextarea = (ref: HTMLTextAreaElement | null) => {
   }
 };
 
-export const getTextStyle = (block: Block) => {
-  switch (block.type) {
+export const getTextStyle = (type: BlockType) => {
+  switch (type) {
     case "h1":
       return "text-4xl font-bold mt-8 mb-4 text-white";
     case "h2":

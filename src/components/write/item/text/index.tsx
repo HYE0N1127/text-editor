@@ -93,7 +93,7 @@ const TextBlock = ({ block, isFocus }: Props) => {
         }
         className={`
           w-full resize-none bg-transparent leading-relaxed focus:outline-none placeholder:text-[#555]
-          ${getTextStyle(block)} 
+          ${getTextStyle(block.type)} 
         `}
         onFocus={() => changeFocus(block.id)}
         onChange={handleInputChange}
