@@ -14,7 +14,7 @@ const EditorBlockCreator = () => {
     enter({ next: id, prev: prev });
   };
 
-  return <button className="bg-transparent w-full h-4" onClick={handleEnter} />;
+  return <button className="bg-transparent w-full h-8" onClick={handleEnter} />;
 };
 
 export default EditorBlockCreator;

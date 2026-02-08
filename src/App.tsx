@@ -1,4 +1,3 @@
-import { MarkdownEditorProvider } from "./components/context/editor/index";
 import { EditorPage } from "./page/index";
 
 function App() {

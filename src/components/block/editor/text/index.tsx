@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
-import { MARKDOWN_RULES } from "../../../constants/rules";
-import { generateId } from "../../../libs/id/index";
-import { useMarkdownEditor } from "../../context/editor/hooks";
-import { useFocusContext, useIsFocus } from "../../context/focus/hooks";
-import { resizeTextarea } from "../../write/item/helpers";
-import { BlockType } from "../../../type/index";
+import { MARKDOWN_RULES } from "../../../../constants/rules";
+import { generateId } from "../../../../libs/id/index";
+import { useMarkdownEditor } from "../../../context/editor/hooks";
+import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
+import { resizeTextarea } from "./helpers";
+import { BlockType } from "../../../../type/index";
 
 type Props = {
   id: string;
@@ -18,7 +18,6 @@ const BlockInput = ({ id, value, type }: Props) => {
   const isFocus = useIsFocus(id);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // 1. 높이 조절
   useEffect(() => {
     resizeTextarea(textareaRef.current);
   }, [value]);
