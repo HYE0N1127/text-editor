@@ -4,9 +4,7 @@ import { EditorPage } from "./page/index";
 function App() {
   return (
     <div className="w-full flex justify-center">
-      <MarkdownEditorProvider>
-        <EditorPage />
-      </MarkdownEditorProvider>
+      <EditorPage />
     </div>
   );
 }

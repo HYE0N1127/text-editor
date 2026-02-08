@@ -1,9 +1,9 @@
 import { memo } from "react";
 import { Block } from "../../../type/index";
 import CodeBlock from "./code/index";
-import ImageBlock from "./image/index";
 import TextBlock from "./text/index";
 import { useIsFocus } from "../../context/focus/hooks";
+import ImageBlock from "./image/index";
 
 interface Props {
   block: Block;
@@ -12,7 +12,6 @@ interface Props {
 const Cell = memo(
   ({ block }: Props) => {
     const isFocus = useIsFocus(block.id);
-    console.log(block.id, isFocus);
 
     if (block.type === "code") {
       return <CodeBlock block={block} />;

@@ -15,7 +15,14 @@ const MARKDOWN_RULES: Record<string, BlockType> = {
   "## ": "h2",
   "### ": "h3",
   "```": "code",
+  "| ": "quote",
+  "- ": "bullet",
 };
+
+/**
+ *
+ * 어떤 형식으로 데이터를 저장할지 생각하기.
+ */
 
 const TextBlock = ({ block, isFocus }: Props) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -57,7 +64,6 @@ const TextBlock = ({ block, isFocus }: Props) => {
           type: type,
           value: text.slice(prefix.length),
         });
-
         return;
       }
     }
@@ -66,6 +72,16 @@ const TextBlock = ({ block, isFocus }: Props) => {
 
   return (
     <div className="group relative flex w-full items-start py-1">
+      {block.type === "quote" && (
+        <div className="mr-3 w-[3px] shrink-0 self-stretch rounded-full bg-gray-300 dark:bg-gray-600" />
+      )}
+
+      {block.type === "bullet" && (
+        <div className="mr-2 flex h-7 w-5 shrink-0 items-center justify-center">
+          <div className="h-1.5 w-1.5 rounded-full bg-white" />
+        </div>
+      )}
+
       <textarea
         ref={textareaRef}
         rows={1}
@@ -79,6 +95,7 @@ const TextBlock = ({ block, isFocus }: Props) => {
           w-full resize-none bg-transparent leading-relaxed focus:outline-none placeholder:text-[#555]
           ${getTextStyle(block)} 
         `}
+        onFocus={() => changeFocus(block.id)}
         onChange={handleInputChange}
         onKeyDown={(e) => {
           // 한글 조합 중일 때는 이벤트를 무시하여 오동작을 방지합니다.
@@ -105,11 +122,8 @@ const TextBlock = ({ block, isFocus }: Props) => {
 
             const prev = getPrevId(block.id);
 
+            changeFocus(prev);
             deleteBlock(block.id);
-            setTimeout(() => {
-              changeFocus(prev);
-            }, 0);
-            // deleteBlock(block.id);
           }
 
           // 엔터를 클릭한 경우 새로운 블럭을 생성하고, 새롭게 생성되는 블럭에 포커싱을 가합니다.

@@ -16,19 +16,33 @@ export class MarkdownEditor {
   }
 
   /**
-   * 파일을 추가하는 경우 사용됩니다.
-   * ImageBlock을 생성하여 추가합니다.
+   * 로딩 상태의 이미지 블록을 추가합니다.
    *
-   * @param url 외부 Storage에 업로드 이후 받아온 이미지의 주소
+   * @returns 생성된 블록의 ID
    */
-  public addFile = (url: string) => {
+  public addPendingImage = (): string => {
+    const id = generateId();
     const newBlock: ImageBlock = {
-      id: generateId(),
+      id,
       type: "image",
-      value: url,
+      value: "",
+      isLoading: true,
     };
 
     this.blocks = [...this._blocks, newBlock];
+    return id;
+  };
+
+  /**
+   * 업로드가 완료될 시 인자로 받은 ID 값에 URL을 추가합니다.
+   */
+  public updateImageBlock = (blockId: string, url: string) => {
+    this.blocks = this._blocks.map((block) => {
+      if (block.id === blockId) {
+        return { ...block, value: url, isLoading: false };
+      }
+      return block;
+    });
   };
 
   /**
@@ -103,7 +117,7 @@ export class MarkdownEditor {
   /**
    * 특정 블록의 데이터를 업데이트합니다.
    *
-   * * @param id 업데이트할 블록의 id
+   * @param id 업데이트할 블록의 id
    * @param data 변경할 데이터 (Partial)
    */
   public updateBlock = (id: string, data: Partial<Block>) => {
