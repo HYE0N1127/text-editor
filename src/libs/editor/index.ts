@@ -1,10 +1,16 @@
+import { BlockRepository } from "../../repository/block/index";
 import { Block, ImageBlock, TextBlock } from "../../type/index";
 import { generateId } from "../id/index";
 
 export class MarkdownEditor {
-  private _blocks: Block[] = [];
+  private _blocks: Block[];
 
   private readonly blockListeners: Set<() => void> = new Set();
+  private readonly repository = new BlockRepository();
+
+  constructor() {
+    this._blocks = this.repository.get();
+  }
 
   public get blocks(): Block[] {
     return this._blocks;
@@ -12,6 +18,7 @@ export class MarkdownEditor {
 
   private set blocks(value: Block[]) {
     this._blocks = [...value];
+    this.repository.update(value);
     this.blockListeners.forEach((listener) => listener());
   }
 
@@ -93,6 +100,10 @@ export class MarkdownEditor {
     const index = this._blocks.findIndex((block) => block.id === id);
 
     if (index === -1) {
+      return undefined;
+    }
+
+    if (index === 0) {
       return undefined;
     }
 
