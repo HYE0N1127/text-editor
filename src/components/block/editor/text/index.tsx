@@ -12,7 +12,7 @@ type Props = {
   type: BlockType;
 };
 
-const BlockInput = ({ id, value, type }: Props) => {
+const TextEditor = ({ id, value, type }: Props) => {
   const { updateBlock, enter, deleteBlock, getPrevId } = useMarkdownEditor();
   const { changeFocus } = useFocusContext();
   const isFocus = useIsFocus(id);
@@ -109,4 +109,4 @@ const BlockInput = ({ id, value, type }: Props) => {
   );
 };
 
-export default BlockInput;
+export default TextEditor;

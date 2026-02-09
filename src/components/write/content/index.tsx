@@ -1,7 +1,7 @@
 import { Block as BlockType } from "../../../type/index";
 import { CodeEditor } from "../../block/editor/code/index";
 import ImageEditor from "../../block/editor/image/index";
-import BlockInput from "../../block/editor/text/index";
+import TextEditor from "../../block/editor/text/index";
 import Block from "../../block/index";
 import Bullet from "../../block/typography/bullet/index";
 import Code from "../../block/typography/code/index";
@@ -34,7 +34,7 @@ const ContentEditor = () => {
       case "quote": {
         return (
           <Quote block={block}>
-            <BlockInput id={block.id} value={block.value} type={block.type} />
+            <TextEditor id={block.id} value={block.value} type={block.type} />
           </Quote>
         );
       }
@@ -42,7 +42,7 @@ const ContentEditor = () => {
       case "bullet": {
         return (
           <Bullet block={block}>
-            <BlockInput id={block.id} value={block.value} type={block.type} />
+            <TextEditor id={block.id} value={block.value} type={block.type} />
           </Bullet>
         );
       }
@@ -50,7 +50,7 @@ const ContentEditor = () => {
       default: {
         return (
           <Typography block={block}>
-            <BlockInput id={block.id} value={block.value} type={block.type} />
+            <TextEditor id={block.id} value={block.value} type={block.type} />
           </Typography>
         );
       }

@@ -37,4 +37,6 @@ export type CodeBlock = Base & {
   language: string;
 };
 
-export type Block = TextBlock | ImageBlock | CodeBlock;
+export type Block = (TextBlock | ImageBlock | CodeBlock) & {
+  children?: Block[];
+};
