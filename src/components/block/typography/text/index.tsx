@@ -7,12 +7,12 @@ type Props = {
 
 const Text = ({ block, children }: Props) => {
   const styles: Record<string, string> = {
-    h1: "text-4xl font-bold text-white mb-4",
-    h2: "text-2xl font-semibold text-white mb-2",
-    h3: "text-xl font-medium text-white mb-1",
-    quote: "text-base text-white italic",
-    text: "text-base text-white leading-relaxed",
-    bullet: "text-base text-white leading-relaxed",
+    h1: "text-4xl font-bold text-white w-full",
+    h2: "text-2xl font-semibold text-white w-full",
+    h3: "text-xl font-medium text-white w-full",
+    quote: "text-base text-white w-full",
+    text: "text-base text-white w-full",
+    bullet: "text-base text-white w-full",
   };
 
   const className = styles[block.type] || styles.text;

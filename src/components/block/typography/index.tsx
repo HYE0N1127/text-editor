@@ -13,13 +13,14 @@ type Props = {
 
 const Typography = ({ block, children }: Props) => {
   const styles: Record<string, string> = {
-    h1: "text-4xl font-bold text-white",
-    h2: "text-2xl font-semibold text-white",
-    h3: "text-xl font-medium text-white",
-    quote: "text-base text-white italic pl-1",
-    text: "text-base text-white leading-relaxed",
-    code: "font-mono text-sm rounded-md",
-    image: "justify-center",
+    h1: "py-2",
+    h2: "py-1.5",
+    h3: "py-1",
+    quote: "py-1",
+    text: "py-1",
+    bullet: "py-0.5",
+    code: "py-2",
+    image: "justify-center py-4",
   };
 
   const renderContent = (children: ReactNode) => {
@@ -43,7 +44,7 @@ const Typography = ({ block, children }: Props) => {
       )}
 
       {block.type === "bullet" && (
-        <div className="mr-2 flex h-7 w-5 shrink-0 items-center justify-center">
+        <div className="mr-2 flex h-6 w-5 shrink-0 items-center justify-center">
           <div className="h-1.5 w-1.5 rounded-full bg-gray-900 dark:bg-white" />
         </div>
       )}
