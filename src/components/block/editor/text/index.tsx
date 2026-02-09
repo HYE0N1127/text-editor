@@ -82,7 +82,7 @@ const BlockInput = ({ id, value, type }: Props) => {
 
         const prevId = getPrevId(id);
 
-        if (prevId) {
+        if (prevId != null) {
           changeFocus(prevId);
         }
 
