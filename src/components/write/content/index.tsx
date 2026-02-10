@@ -1,4 +1,5 @@
 import { Block as BlockType } from "../../../type/index";
+import BulletEditor from "../../block/editor/bullet/index";
 import { CodeEditor } from "../../block/editor/code/index";
 import ImageEditor from "../../block/editor/image/index";
 import TextEditor from "../../block/editor/text/index";
@@ -42,7 +43,7 @@ const ContentEditor = () => {
       case "bullet": {
         return (
           <Bullet block={block}>
-            <TextEditor id={block.id} value={block.value} type={block.type} />
+            <BulletEditor block={block} />
           </Bullet>
         );
       }
