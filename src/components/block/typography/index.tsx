@@ -32,7 +32,9 @@ const Typography = memo(
     );
   },
   (prev: Props, next: Props) =>
-    prev.block.id === next.block.id && prev.block.value === next.block.value,
+    prev.block.id === next.block.id &&
+    prev.block.value === next.block.value &&
+    prev.block.type === next.block.type,
 );
 
 export default Typography;

@@ -3,7 +3,7 @@ import { MARKDOWN_RULES } from "../../../../constants/rules";
 import { generateId } from "../../../../libs/id/index";
 import { useMarkdownEditor } from "../../../context/editor/hooks";
 import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
-import { resizeTextarea } from "./helpers";
+import { getTextStyle, resizeTextarea } from "./helpers";
 import { BlockType } from "../../../../type/index";
 
 type Props = {
@@ -104,7 +104,7 @@ const TextEditor = ({ id, value, type }: Props) => {
           ? `제목 ${type.replace("h", "")}`
           : "내용을 입력하세요..."
       }
-      className="block w-full resize-none bg-transparent p-0 focus:outline-none placeholder:text-gray-400"
+      className={`block w-full resize-none bg-transparent p-0 focus:outline-none placeholder:text-gray-400 ${getTextStyle(type)}`}
     />
   );
 };
