@@ -1,10 +1,9 @@
 import { upload } from "@vercel/blob/client";
 import { PropsWithChildren, useCallback } from "react";
-import { useMarkdownEditor } from "../../context/editor/hooks";
+import { useEditor } from "../../context/editor/hooks";
 
 const ImageDropZone = ({ children }: PropsWithChildren) => {
-  const { addPendingImage, updateImageBlock, deleteBlock } =
-    useMarkdownEditor();
+  const { addPendingImage, updateImageBlock, deleteBlock } = useEditor();
 
   const handleUpload = async (file: File) => {
     if (!file.type.startsWith("image/")) {

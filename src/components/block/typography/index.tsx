@@ -1,9 +1,9 @@
-import { Block as BlockType } from "../../../type/index";
+import { Block } from "../../../type/tree/index";
 import { memo, PropsWithChildren } from "react";
 import Text from "./text/index";
 
 type Props = {
-  block: BlockType;
+  block: Block;
 } & PropsWithChildren;
 
 const Typography = memo(
@@ -31,8 +31,8 @@ const Typography = memo(
       </div>
     );
   },
+
   (prev: Props, next: Props) =>
-    prev.block.id === next.block.id &&
     prev.block.value === next.block.value &&
     prev.block.type === next.block.type,
 );

@@ -1,10 +1,10 @@
 import { generateId } from "../../../libs/id/index";
-import { useMarkdownEditor } from "../../context/editor/hooks";
+import { useEditor } from "../../context/editor/hooks";
 import { useFocusContext, useIsFocus } from "../../context/focus/hooks";
 
 const TitleEditor = () => {
   const { changeFocus } = useFocusContext();
-  const { enter } = useMarkdownEditor();
+  const { enter } = useEditor();
 
   return (
     <div className="mb-4 pt-12">

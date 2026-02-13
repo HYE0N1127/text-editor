@@ -1,4 +1,4 @@
-import { BlockType } from "../../../../type/index";
+import { BlockType } from "../../../../type/tree/index";
 
 export const resizeTextarea = (ref: HTMLTextAreaElement | null) => {
   if (ref) {

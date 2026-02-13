@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { Block } from "../../../../type/index";
+import { Block } from "../../../../type/tree/index";
 
 type Props = {
   block: Block;

@@ -1,19 +1,20 @@
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { useEffect, useRef } from "react";
-import { CodeBlock as CodeBlockType } from "../../../../type/index";
-import { useMarkdownEditor } from "../../../context/editor/hooks";
+import { CodeBlock as CodeBlockType } from "../../../../type/tree/index";
 import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
 import { generateId } from "../../../../libs/id/index";
+import { useEditor } from "../../../context/editor/hooks";
 
 type Props = {
+  id: string;
   block: CodeBlockType;
 };
 
-export const CodeEditor = ({ block }: Props) => {
-  const { updateBlock, enter } = useMarkdownEditor();
+export const CodeEditor = ({ id, block }: Props) => {
+  const { updateBlock, enter } = useEditor();
   const { changeFocus } = useFocusContext();
-  const isFocus = useIsFocus(block.id);
+  const isFocus = useIsFocus(id);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -33,9 +34,7 @@ export const CodeEditor = ({ block }: Props) => {
       <div className="absolute right-2 top-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
         <select
           value={language}
-          onChange={(e) =>
-            updateBlock(block.id, { language: e.target.value } as any)
-          }
+          onChange={(e) => updateBlock(id, { language: e.target.value } as any)}
           className="rounded bg-[#333] px-2 py-1 text-xs text-[#E0E0E0] outline-none hover:bg-[#444] cursor-pointer border border-[#444]"
         >
           <option value="javascript">JavaScript</option>
@@ -47,7 +46,7 @@ export const CodeEditor = ({ block }: Props) => {
 
       <Editor
         value={block.value}
-        onValueChange={(code) => updateBlock(block.id, { value: code })}
+        onValueChange={(code) => updateBlock(id, { value: code })}
         highlight={(code) => {
           const grammar =
             Prism.languages[language] || Prism.languages.plaintext;
@@ -62,19 +61,19 @@ export const CodeEditor = ({ block }: Props) => {
         }}
         className="bg-transparent"
         textareaClassName="focus:outline-none"
-        onFocus={() => changeFocus(block.id)}
+        onFocus={() => changeFocus(id)}
         onKeyDown={(e) => {
           if (e.key === "Enter" && e.shiftKey) {
             e.preventDefault();
-            const id = generateId();
+            const created = generateId();
 
-            changeFocus(id);
-            enter({ next: id, prev: block.id });
+            changeFocus(created);
+            enter({ next: created, prev: id });
           }
 
           if (e.key === "Backspace" && block.value === "") {
             e.preventDefault();
-            updateBlock(block.id, { type: "text" });
+            updateBlock(id, { type: "text" });
           }
         }}
       />

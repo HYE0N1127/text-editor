@@ -1,18 +1,24 @@
 import { useContext, useSyncExternalStore } from "react";
 import { MarkdownEditorContext } from "./contexts";
 
-export const useMarkdownEditor = () => {
-  const article = useContext(MarkdownEditorContext);
+export const useEditor = () => {
+  const editor = useContext(MarkdownEditorContext);
 
-  if (article == null) {
-    throw new Error("useMarkdownEditor must used in MarkdownEditorProvider");
+  if (editor == null) {
+    throw new Error("useEditor must be used within a MarkdownEditorProvider");
   }
 
-  return article;
+  return editor;
 };
 
-export const useMarkdownContents = () => {
-  const context = useMarkdownEditor();
+export const useNode = (id: string) => {
+  const editor = useEditor();
 
-  return useSyncExternalStore(context.subscribe, () => context.blocks);
+  return useSyncExternalStore(editor.subscribe, () => editor.state.nodes[id]);
+};
+
+export const useRootIds = () => {
+  const editor = useEditor();
+
+  return useSyncExternalStore(editor.subscribe, () => editor.state.rootIds);
 };

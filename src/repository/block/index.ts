@@ -1,22 +1,22 @@
 import { BrowserStorage } from "../../libs/storage/index";
-import { Block } from "../../type/index";
+import { State } from "../../type/tree/index";
 
 const STORAGE_KEY = "markdown_editor_contents";
 
 export class BlockRepository {
-  private readonly storage: BrowserStorage<Block[]> = new BrowserStorage(
+  private readonly storage: BrowserStorage<State> = new BrowserStorage(
     window.localStorage,
   );
 
-  public get(): Block[] {
-    return this.storage.get(STORAGE_KEY) ?? [];
+  public get(): State | undefined {
+    return this.storage.get(STORAGE_KEY) ?? undefined;
   }
 
-  public update(blocks: Block[]): void {
-    this.storage.set(STORAGE_KEY, blocks);
+  public update(state: State): void {
+    this.storage.set(STORAGE_KEY, state);
   }
 
   clear(): void {
-    this.storage.set(STORAGE_KEY, []);
+    this.storage.set(STORAGE_KEY, undefined);
   }
 }

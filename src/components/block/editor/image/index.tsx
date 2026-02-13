@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
-import { useMarkdownEditor } from "../../../context/editor/hooks";
 import { generateId } from "../../../../libs/id/index";
+import { useEditor } from "../../../context/editor/hooks";
 
 type Props = {
   id: string;
@@ -9,7 +9,7 @@ type Props = {
 
 const ImageEditor = ({ id }: Props) => {
   const { changeFocus } = useFocusContext();
-  const { deleteBlock, enter } = useMarkdownEditor();
+  const { deleteBlock, enter } = useEditor();
 
   const isFocus = useIsFocus(id);
   const containerRef = useRef<HTMLDivElement | null>(null);

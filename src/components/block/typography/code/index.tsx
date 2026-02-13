@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { CodeBlock as CodeBlockType } from "../../../../type/index";
+import { CodeBlock as CodeBlockType } from "../../../../type/tree/index";
 
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-typescript";

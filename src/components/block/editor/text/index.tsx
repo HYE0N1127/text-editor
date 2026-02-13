@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { MARKDOWN_RULES } from "../../../../constants/rules";
 import { generateId } from "../../../../libs/id/index";
-import { useMarkdownEditor } from "../../../context/editor/hooks";
 import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
 import { getTextStyle, resizeTextarea } from "./helpers";
-import { BlockType } from "../../../../type/index";
+import { Block, BlockType } from "../../../../type/tree/index";
+import { useEditor } from "../../../context/editor/hooks";
 
 type Props = {
   id: string;
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const TextEditor = ({ id, value, type }: Props) => {
-  const { updateBlock, enter, deleteBlock, getPrevId } = useMarkdownEditor();
+  const { updateBlock, enter, deleteBlock, getPrevId } = useEditor();
   const { changeFocus } = useFocusContext();
   const isFocus = useIsFocus(id);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -44,7 +44,7 @@ const TextEditor = ({ id, value, type }: Props) => {
             type: "code",
             value: text.slice(prefix.length),
             language: "javascript",
-          } as any);
+          } as Block);
           return;
         }
 
@@ -77,6 +77,7 @@ const TextEditor = ({ id, value, type }: Props) => {
         updateBlock(id, { type: "text" });
         return;
       }
+
       if (type === "text") {
         e.preventDefault();
 

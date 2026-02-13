@@ -1,13 +1,14 @@
 import { PropsWithChildren } from "react";
-import { ImageBlock as ImageBlockType } from "../../../../type/index";
+import { ImageBlock as ImageBlockType } from "../../../../type/tree/index";
 import { useIsFocus } from "../../../context/focus/hooks";
 
 type Props = {
+  id: string;
   block: ImageBlockType;
 } & PropsWithChildren;
 
-const Image = ({ block, children }: Props) => {
-  const isFocus = useIsFocus(block.id);
+const Image = ({ id, block, children }: Props) => {
+  const isFocus = useIsFocus(id);
 
   if (block.isLoading) {
     return (
