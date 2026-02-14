@@ -57,16 +57,20 @@ export const BlockNode = ({ id }: { id: string }) => {
   };
 
   return (
-    <div>
-      {renderBlockContent()}
-
-      {childrenIds.length > 0 && (
-        <div className="ml-3 flex flex-col gap-1 mt-1">
-          {childrenIds.map((childId) => (
-            <BlockNode key={childId} id={childId} />
-          ))}
+    <div className="flex w-full items-start">
+      <div className="flex-1 min-w-0">
+        <div className="group rounded-md hover:bg-gray-800 transition-colors duration-200 my-0.5 px-1 py-0.5">
+          {renderBlockContent()}
         </div>
-      )}
+
+        {childrenIds.length > 0 && (
+          <div className="ml-6 flex flex-col gap-1 mt-1">
+            {childrenIds.map((childId) => (
+              <BlockNode key={childId} id={childId} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
