@@ -8,6 +8,8 @@ import Image from "../../../block/typography/image/index";
 import Typography from "../../../block/typography/index";
 import Quote from "../../../block/typography/quote/index";
 import { useNode } from "../../../context/editor/hooks";
+import { MdDragIndicator } from "react-icons/md";
+import Dragger from "../../../drag/block/drag/index";
 
 export const BlockNode = ({ id }: { id: string }) => {
   const node = useNode(id);
@@ -57,20 +59,31 @@ export const BlockNode = ({ id }: { id: string }) => {
   };
 
   return (
-    <div className="flex w-full items-start">
-      <div className="flex-1 min-w-0">
-        <div className="group rounded-md hover:bg-gray-800 transition-colors duration-200 my-0.5 px-1 py-0.5">
-          {renderBlockContent()}
+    <Dragger id={id}>
+      <div className="group/line relative flex w-full items-start">
+        <div
+          data-drag-handle
+          className="absolute -left-5 top-0 bottom-0 flex items-center justify-center invisible opacity-0 transition-all duration-200 group-hover/line:visible group-hover/line:opacity-100"
+        >
+          <div className="flex h-5 w-4 cursor-grab items-center justify-center rounded text-gray-400 hover:text-gray-200 transition-colors active:cursor-grabbing">
+            <MdDragIndicator size={18} />
+          </div>
         </div>
 
-        {childrenIds.length > 0 && (
-          <div className="ml-6 flex flex-col gap-1 mt-1">
-            {childrenIds.map((childId) => (
-              <BlockNode key={childId} id={childId} />
-            ))}
+        <div className="flex-1 min-w-0">
+          <div className="rounded-md hover:bg-gray-800 transition-colors duration-200 my-0.5 px-1 py-0.5">
+            {renderBlockContent()}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+
+      {childrenIds.length > 0 && (
+        <div className="ml-6 flex flex-col gap-1 mt-1">
+          {childrenIds.map((childId) => (
+            <BlockNode key={childId} id={childId} />
+          ))}
+        </div>
+      )}
+    </Dragger>
   );
 };

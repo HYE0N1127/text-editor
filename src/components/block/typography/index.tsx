@@ -24,9 +24,7 @@ const Typography = memo(
     };
 
     return (
-      <div
-        className={`group relative flex w-full items-start py-1 ${styles[block.type] || ""}`}
-      >
+      <div className={`group relative flex w-full items-start`}>
         <Text block={block}>{children}</Text>
       </div>
     );
