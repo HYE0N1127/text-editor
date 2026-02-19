@@ -19,11 +19,17 @@ export const DragAndDropProvider = ({ children }: PropsWithChildren) => {
 type Props<T extends ElementType> = {
   as?: T;
   onDrop?: (activeId: string, closestId: string) => void;
-} & Omit<
-  ComponentPropsWithRef<T>,
-  "as" | "onDrop" | "onDragOver" | "onDragLeave" | "onDragStart"
->;
+} & Omit<ComponentPropsWithRef<T>, "as" | "onDrop">;
 
+/**
+ * Drop이 일어나는 영역을 담당합니다
+ *
+ * @param as? : Div 이외의 형태를 사용하고 싶은 경우 추가합니다. (ex. ul)
+ * @param onDrop : drop이 일어나는 시점에 실행할 콜백 함수
+ *
+ * @example
+ * <DropZone as="ul">
+ */
 export const DropZone = <T extends ElementType = "div">({
   as,
   children,
@@ -35,7 +41,8 @@ export const DropZone = <T extends ElementType = "div">({
   const context = useDragContext();
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
-    const targetBlock = (e.target as HTMLElement).closest("[id]");
+    const targetBlock = e.target as HTMLElement;
+
     if (targetBlock && targetBlock.id) {
       context.dragStart(targetBlock.id);
     }
@@ -52,9 +59,11 @@ export const DropZone = <T extends ElementType = "div">({
   };
 
   const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    // DropZone 내부의 아이템에 마우스가 올라가 DragLeave 이벤트가 동작하는 경우를 방지합니다.
     if (ref.current?.contains(e.relatedTarget as Node)) {
       return;
     }
+
     context.dragLeave();
   };
 
@@ -66,6 +75,7 @@ export const DropZone = <T extends ElementType = "div">({
     if (activeId && closestId) {
       onDrop?.(activeId, closestId);
     }
+
     context.dragEnd();
   };
 

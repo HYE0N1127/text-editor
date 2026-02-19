@@ -7,18 +7,15 @@ import Code from "../../../block/typography/code/index";
 import Image from "../../../block/typography/image/index";
 import Typography from "../../../block/typography/index";
 import Quote from "../../../block/typography/quote/index";
-import { useNode } from "../../../context/editor/hooks";
+import { useBlock } from "../../../context/editor/hooks";
 import { MdDragIndicator } from "react-icons/md";
 import Dragger from "../../../drag/block/drag/index";
 import { useIsClosest } from "../../../drag/block/drop/hooks";
+import { memo } from "react";
 
-export const BlockNode = ({ id }: { id: string }) => {
-  const node = useNode(id);
+const Block = memo(({ id }: { id: string }) => {
+  const { block, childrenIds } = useBlock(id);
   const isClosest = useIsClosest(id);
-
-  if (!node) return null;
-
-  const { block, childrenIds } = node;
 
   const renderBlockContent = () => {
     switch (block.type) {
@@ -83,10 +80,12 @@ export const BlockNode = ({ id }: { id: string }) => {
       {childrenIds.length > 0 && (
         <div className="ml-6 flex flex-col gap-1 mt-1">
           {childrenIds.map((childId) => (
-            <BlockNode key={childId} id={childId} />
+            <Block key={childId} id={childId} />
           ))}
         </div>
       )}
     </Dragger>
   );
-};
+});
+
+export default Block;

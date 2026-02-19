@@ -16,13 +16,6 @@ const Typography = memo(
       );
     }
 
-    const styles: Record<string, string> = {
-      h1: "py-2",
-      h2: "py-1.5",
-      h3: "py-1",
-      text: "py-1",
-    };
-
     return (
       <div className={`group relative flex w-full items-start`}>
         <Text block={block}>{children}</Text>

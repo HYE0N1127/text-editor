@@ -11,7 +11,7 @@ export const useEditor = () => {
   return editor;
 };
 
-export const useNode = (id: string) => {
+export const useBlock = (id: string) => {
   const editor = useEditor();
 
   return useSyncExternalStore(editor.subscribe, () => editor.state.nodes[id]);

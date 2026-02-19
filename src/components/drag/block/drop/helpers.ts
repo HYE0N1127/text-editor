@@ -2,9 +2,7 @@ export const findClosestElement = (
   element: HTMLElement,
   y: number,
 ): Element | undefined => {
-  const elements = element.querySelectorAll(
-    "[draggable='true'][data-dragging='false']",
-  );
+  const elements = element.querySelectorAll("[data-dragging='false']");
 
   let closestElement: Element | undefined = undefined;
   let closestOffset = -Infinity;

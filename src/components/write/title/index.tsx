@@ -1,6 +1,6 @@
 import { generateId } from "../../../libs/id/index";
 import { useEditor } from "../../context/editor/hooks";
-import { useFocusContext, useIsFocus } from "../../context/focus/hooks";
+import { useFocusContext } from "../../context/focus/hooks";
 
 const TitleEditor = () => {
   const { changeFocus } = useFocusContext();

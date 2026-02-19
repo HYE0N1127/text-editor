@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { TextBlock } from "../../../../type/tree/index";
-import { useEditor, useNode } from "../../../context/editor/hooks";
+import { useBlock, useEditor } from "../../../context/editor/hooks";
 import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
 import { resizeTextarea } from "../text/helpers";
 import { generateId } from "../../../../libs/id/index";
@@ -11,13 +11,12 @@ type Props = {
 
 const BulletEditor = ({ id }: Props) => {
   const editor = useEditor();
-  const node = useNode(id);
+  const { block, childrenIds } = useBlock(id);
   const { changeFocus } = useFocusContext();
   const isFocus = useIsFocus(id);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const parentId = node?.parentId;
-  const value = node ? (node.block as TextBlock).value : "";
+  const value = (block as TextBlock).value ?? "";
 
   useEffect(() => {
     resizeTextarea(textareaRef.current);
@@ -33,9 +32,6 @@ const BulletEditor = ({ id }: Props) => {
       }
     }
   }, [isFocus]);
-
-  // 💡 3. Hook 호출이 모두 끝난 이 시점에서 컴포넌트를 종료(Early Return)합니다.
-  if (!node) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
@@ -73,9 +69,8 @@ const BulletEditor = ({ id }: Props) => {
     if (e.key === "Backspace" && value === "") {
       e.preventDefault();
 
-      if (parentId != null) {
+      if (childrenIds != null) {
         const prevId = editor.getPrevId(id);
-        console.log(prevId);
 
         if (prevId) {
           changeFocus(prevId);
@@ -102,7 +97,7 @@ const BulletEditor = ({ id }: Props) => {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onFocus={() => changeFocus(id)}
-        placeholder="리스트 입력..."
+        placeholder="내용을 입력해주세요"
         className="block w-full resize-none bg-transparent p-0 text-base leading-6 focus:outline-none placeholder:text-gray-400"
       />
     </div>

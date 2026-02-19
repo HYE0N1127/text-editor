@@ -47,7 +47,7 @@ export class DragAndDrop {
     }
   }
 
-  public subscribe = (listener: () => void): (() => void) => {
+  public subscribe = (listener: () => void) => {
     this._listeners.add(listener);
 
     return () => {
