@@ -37,7 +37,7 @@ export const DropZone = <T extends ElementType = "div">({
   ...rest
 }: Props<T>) => {
   const Component = as || "div";
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const context = useDragContext();
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
