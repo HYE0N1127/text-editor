@@ -1,5 +1,5 @@
 import { PropsWithChildren, useMemo } from "react";
-import { MarkdownEditor } from "../../../libs/tree/index";
+import { MarkdownEditor } from "../../../libs/editor/index";
 import { MarkdownEditorContext } from "./contexts";
 
 export const MarkdownEditorProvider = ({ children }: PropsWithChildren) => {

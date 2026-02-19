@@ -11,7 +11,7 @@ type Props = {
   block: CodeBlockType;
 };
 
-export const CodeEditor = ({ id, block }: Props) => {
+const CodeEditor = ({ id, block }: Props) => {
   const { updateBlock, enter } = useEditor();
   const { changeFocus } = useFocusContext();
   const isFocus = useIsFocus(id);
@@ -80,3 +80,5 @@ export const CodeEditor = ({ id, block }: Props) => {
     </div>
   );
 };
+
+export default CodeEditor;

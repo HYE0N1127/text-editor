@@ -24,7 +24,9 @@ export class DragAndDrop {
   }
 
   public dragOver(y: number, container: HTMLElement) {
-    if (!this._activeId) return;
+    if (this._activeId == null) {
+      return;
+    }
 
     const closestEl = findClosestElement(container, y);
     const closestId = closestEl?.id || undefined;

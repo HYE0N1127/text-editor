@@ -1,5 +1,5 @@
 import BulletEditor from "../../../block/editor/bullet/index";
-import { CodeEditor } from "../../../block/editor/code/index";
+import CodeEditor from "../../../block/editor/code/index";
 import ImageEditor from "../../../block/editor/image/index";
 import TextEditor from "../../../block/editor/text/index";
 import Bullet from "../../../block/typography/bullet/index";
@@ -64,7 +64,7 @@ export const BlockNode = ({ id }: { id: string }) => {
     <Dragger id={id}>
       <div className="group/line relative flex w-full items-start">
         {isClosest && (
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-[2px] bg-blue-500" />
+          <div className="pointer-events-none absolute top-0 left-0 right-0 z-50 h-[2px] bg-blue-500" />
         )}
 
         <div className="absolute -left-5 top-0 bottom-0 flex items-center justify-center invisible opacity-0 transition-all duration-200 group-hover/line:visible group-hover/line:opacity-100">
