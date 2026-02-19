@@ -2,7 +2,7 @@
   "name": "text-editor",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://HYE0N1127.github.io/text-editor",
+  "homepage": "https://hye0n1127.github.io/text-editor",
   "dependencies": {
     "@vercel/blob": "^2.1.0",
     "prismjs": "^1.30.0",
