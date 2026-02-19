@@ -1,4 +1,4 @@
-name: Deploy static content to Pages
+name: Deploy React app to GitHub Pages
 
 on:
   push:
@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -23,13 +23,24 @@ jobs:
       - name: Checkout 코드를 가져옵니다
         uses: actions/checkout@v4
 
+      - name: Node.js 설정 (React 빌드 환경)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 의존성 패키지 설치
+        run: npm install
+
+      - name: React 프로젝트 빌드
+        run: npm run build
+
       - name: Setup Pages 설정
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact (배포할 파일 업로드)
+      - name: Upload artifact (빌드된 폴더 업로드)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "./build"
 
       - name: Deploy to GitHub Pages (실제 배포)
         id: deployment
