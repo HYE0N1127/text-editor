@@ -11,7 +11,7 @@ type Props = {
 
 const BulletEditor = ({ id }: Props) => {
   const editor = useEditor();
-  const { block, childrenIds } = useBlock(id);
+  const { block, parentId } = useBlock(id);
   const { changeFocus } = useFocusContext();
   const isFocus = useIsFocus(id);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -73,20 +73,18 @@ const BulletEditor = ({ id }: Props) => {
     if (e.key === "Backspace" && value === "") {
       e.preventDefault();
 
-      if (childrenIds != null) {
-        const prevId = editor.getPrevId(id);
-
-        if (prevId) {
-          changeFocus(prevId);
-        }
-
-        editor.deleteBlock(id);
-
+      if (parentId == null && block.type !== "text") {
+        editor.updateBlock(id, { type: "text" });
         return;
       }
 
-      editor.updateBlock(id, { type: "text" });
+      const prevId = editor.getPrevId(id);
 
+      if (prevId) {
+        changeFocus(prevId);
+      }
+
+      editor.deleteBlock(id);
       return;
     }
   };
