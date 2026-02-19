@@ -39,7 +39,9 @@ const BulletEditor = ({ id }: Props) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.nativeEvent.isComposing) return;
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
 
     const isModifier = e.metaKey || e.ctrlKey;
 
@@ -54,6 +56,7 @@ const BulletEditor = ({ id }: Props) => {
 
       editor.addChild(id, update, newChildId);
       changeFocus(newChildId);
+
       return;
     }
 
@@ -63,6 +66,7 @@ const BulletEditor = ({ id }: Props) => {
 
       editor.enter({ next: newId, prev: id, type: "bullet" });
       changeFocus(newId);
+
       return;
     }
 
@@ -77,10 +81,12 @@ const BulletEditor = ({ id }: Props) => {
         }
 
         editor.deleteBlock(id);
+
         return;
       }
 
       editor.updateBlock(id, { type: "text" });
+
       return;
     }
   };

@@ -20,7 +20,9 @@ const TitleEditor = () => {
          focus:outline-none
         "
         onKeyDown={(e) => {
-          if (e.nativeEvent.isComposing) return;
+          if (e.nativeEvent.isComposing) {
+            return;
+          }
 
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();

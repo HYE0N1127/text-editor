@@ -39,7 +39,9 @@ const ImageDropZone = ({ children }: PropsWithChildren) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+    if (e.currentTarget.contains(e.relatedTarget as Node)) {
+      return;
+    }
   }, []);
 
   const onDrop = useCallback(async (e: React.DragEvent<HTMLDivElement>) => {

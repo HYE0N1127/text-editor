@@ -21,7 +21,9 @@ const ImageEditor = ({ id }: Props) => {
   }, [isFocus]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.nativeEvent.isComposing) return;
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
 
     if (e.key === "Backspace" || e.key === "Delete") {
       e.preventDefault();

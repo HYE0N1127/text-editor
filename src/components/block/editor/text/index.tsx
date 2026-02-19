@@ -45,6 +45,7 @@ const TextEditor = ({ id, value, type }: Props) => {
             value: text.slice(prefix.length),
             language: "javascript",
           } as Block);
+
           return;
         }
 
@@ -52,6 +53,7 @@ const TextEditor = ({ id, value, type }: Props) => {
           type: ruleType,
           value: text.slice(prefix.length),
         });
+
         return;
       }
     }
@@ -59,7 +61,9 @@ const TextEditor = ({ id, value, type }: Props) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.nativeEvent.isComposing) return;
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
 
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();

@@ -181,7 +181,9 @@ export class MarkdownEditor {
    */
   public updateBlock = (id: string, data: Partial<Block>) => {
     const node = this._state.nodes[id];
-    if (!node) return;
+    if (node == null) {
+      return;
+    }
 
     // 해당 노드의 block 객체만 새로운 데이터로 병합하여 상태를 업데이트합니다.
     this.state = {
@@ -205,7 +207,7 @@ export class MarkdownEditor {
    */
   public addChild = (parentId: string, childBlock: Block, childId?: string) => {
     const parent = this._state.nodes[parentId];
-    if (!parent) return;
+    if (parent == null) return;
 
     const id = childId || generateId();
     const updateNode: Node = {
@@ -232,16 +234,19 @@ export class MarkdownEditor {
    * @param targetId 삭제할 타겟 블록의 ID
    */
   public deleteBlock = (targetId: string) => {
-    const targetNode = this._state.nodes[targetId];
-    if (!targetNode) return;
+    const target = this._state.nodes[targetId];
+
+    if (target == null) {
+      return;
+    }
 
     const updateNodes = { ...this._state.nodes };
     let updateRootIds = [...this._state.rootIds];
 
     // 삭제할 블록의 부모 배열 또는 루트 배열에서 타겟 ID를 제거합니다.
-    if (targetNode.parentId) {
-      const parent = updateNodes[targetNode.parentId];
-      updateNodes[targetNode.parentId] = {
+    if (target.parentId) {
+      const parent = updateNodes[target.parentId];
+      updateNodes[target.parentId] = {
         ...parent,
         childrenIds: parent.childrenIds.filter((id) => id !== targetId),
       };
@@ -276,7 +281,10 @@ export class MarkdownEditor {
 
     const activeNode = this._state.nodes[activeId];
     const overNode = this._state.nodes[overId];
-    if (!activeNode || !overNode) return;
+
+    if (activeNode == null || overNode == null) {
+      return;
+    }
 
     const updateNodes = { ...this._state.nodes };
     let updateRootIds = [...this._state.rootIds];

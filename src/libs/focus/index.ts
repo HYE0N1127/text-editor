@@ -17,7 +17,9 @@ export class Focus {
    * @param id 포커스할 블록의 ID
    */
   public changeFocus = (id: string | undefined) => {
-    if (this._focusId === id) return;
+    if (this._focusId === id) {
+      return;
+    }
 
     this.currentFocusId = id;
   };
