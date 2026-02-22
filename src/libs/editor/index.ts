@@ -302,7 +302,7 @@ export class MarkdownEditor {
     }
 
     // 이동할 블록의 부모 ID를 타겟 블록의 부모 ID로 변경합니다.
-    activeNode.parentId = overNode.parentId;
+    updateNodes[activeId] = { ...activeNode, parentId: overNode.parentId };
 
     // 타겟 블록이 속한 배열의 해당 위치에 activeId를 삽입합니다.
     if (overNode.parentId) {
