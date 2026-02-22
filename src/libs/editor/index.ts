@@ -234,36 +234,49 @@ export class MarkdownEditor {
    * @param targetId 삭제할 타겟 블록의 ID
    */
   public deleteBlock = (targetId: string) => {
+    const getDescendantIds = (id: string): string[] => {
+      const node = this._state.nodes[id];
+
+      if (node == null) {
+        return [];
+      }
+
+      // 배열이 반환되기에, 배열이 중첩되는 상황이 생기므로 flatMap을 통하여 배열 평탄화를 진행합니다.
+      return [
+        id,
+        ...node.childrenIds.flatMap((childId) => getDescendantIds(childId)),
+      ];
+    };
+
     const target = this._state.nodes[targetId];
 
     if (target == null) {
       return;
     }
 
+    const idsToDelete = new Set(getDescendantIds(targetId));
+
+    // 객체를 복사한 후 삭제해야 하는 노드들을 기존의 리스트에서 필터링합니다.
     const updateNodes = { ...this._state.nodes };
+
+    idsToDelete.forEach((id) => {
+      delete updateNodes[id];
+    });
+
     let updateRootIds = [...this._state.rootIds];
 
-    // 삭제할 블록의 부모 배열 또는 루트 배열에서 타겟 ID를 제거합니다.
-    if (target.parentId) {
-      const parent = updateNodes[target.parentId];
+    // 타겟 블록이 부모를 가지고 있다면, 부모의 자식 요소 배열에서 삭제할 블럭의 아이디를 제거합니다.
+    if (target.parentId != null) {
+      const parent = this._state.nodes[target.parentId];
+
       updateNodes[target.parentId] = {
         ...parent,
         childrenIds: parent.childrenIds.filter((id) => id !== targetId),
       };
     } else {
+      // 기준 노드가 최상위 루트 블록이라면, rootIds 배열에서 타겟 ID를 제거합니다.
       updateRootIds = updateRootIds.filter((id) => id !== targetId);
     }
-
-    // 메모리 누수를 방지하기 위해 타겟 블록과 그 하위의 모든 노드 데이터를 삭제합니다.
-    const deleteRecursively = (id: string) => {
-      const node = updateNodes[id];
-      if (node) {
-        node.childrenIds.forEach(deleteRecursively);
-        delete updateNodes[id];
-      }
-    };
-
-    deleteRecursively(targetId);
 
     this.state = { nodes: updateNodes, rootIds: updateRootIds };
   };
