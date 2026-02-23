@@ -303,7 +303,7 @@ export class MarkdownEditor {
     let updateRootIds = [...this._state.rootIds];
 
     // 기존 위치에서 activeId를 제거합니다.
-    if (activeNode.parentId) {
+    if (activeNode.parentId != null) {
       const oldParent = updateNodes[activeNode.parentId];
 
       updateNodes[activeNode.parentId] = {
@@ -315,22 +315,31 @@ export class MarkdownEditor {
     }
 
     // 이동할 블록의 부모 ID를 타겟 블록의 부모 ID로 변경합니다.
-    updateNodes[activeId] = { ...activeNode, parentId: overNode.parentId };
+    updateNodes[activeId] = {
+      ...activeNode,
+      parentId: overNode.parentId,
+    };
 
     // 타겟 블록이 속한 배열의 해당 위치에 activeId를 삽입합니다.
-    if (overNode.parentId) {
+    if (overNode.parentId != null) {
       const updateParent = updateNodes[overNode.parentId];
       const updateChildrenIds = [...updateParent.childrenIds];
       const insertIndex = updateChildrenIds.indexOf(overId);
 
-      updateChildrenIds.splice(insertIndex, 0, activeId);
+      const targetIndex =
+        insertIndex !== -1 ? insertIndex : updateChildrenIds.length;
+      updateChildrenIds.splice(targetIndex, 0, activeId);
+
       updateNodes[overNode.parentId] = {
         ...updateParent,
         childrenIds: updateChildrenIds,
       };
     } else {
       const insertIndex = updateRootIds.indexOf(overId);
-      updateRootIds.splice(insertIndex, 0, activeId);
+      const targetIndex =
+        insertIndex !== -1 ? insertIndex : updateRootIds.length;
+
+      updateRootIds.splice(targetIndex, 0, activeId);
     }
 
     this.state = { nodes: updateNodes, rootIds: updateRootIds };
