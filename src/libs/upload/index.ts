@@ -9,7 +9,9 @@ import { upload } from "@vercel/blob/client";
  */
 export const uploadImage = async (file: File): Promise<string> => {
   try {
-    const response = await upload(file.name, file, {
+    const uniqueFilename = `${Date.now()}_${file.name}`;
+
+    const response = await upload(uniqueFilename, file, {
       access: "public",
       handleUploadUrl: "/api/upload",
     });

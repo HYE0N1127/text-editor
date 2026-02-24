@@ -1,10 +1,12 @@
 import { upload } from "@vercel/blob/client";
 import { PropsWithChildren, useCallback } from "react";
 import { useEditor } from "../../context/editor/hooks";
+import { uploadImage } from "../../../libs/upload/index";
 
 const ImageDropZone = ({ children }: PropsWithChildren) => {
   const { addPendingImage, updateImageBlock, deleteBlock } = useEditor();
 
+  // FIXME: uploadImage로 바꾼거 날라가있으니 다시 넣기
   const handleUpload = async (file: File) => {
     if (!file.type.startsWith("image/")) {
       alert("이미지 파일만 업로드 가능합니다.");
@@ -14,14 +16,9 @@ const ImageDropZone = ({ children }: PropsWithChildren) => {
     const blockId = addPendingImage();
 
     try {
-      const uniqueFilename = `${Date.now()}_${file.name}`;
+      const url = await uploadImage(file);
 
-      const blob = await upload(uniqueFilename, file, {
-        access: "public",
-        handleUploadUrl: "/api/upload",
-      });
-
-      updateImageBlock(blockId, blob.url);
+      updateImageBlock(blockId, url);
     } catch (error) {
       deleteBlock(blockId);
 
