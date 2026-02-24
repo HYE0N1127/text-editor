@@ -1,23 +1,22 @@
-import { useContext, useSyncExternalStore } from "react";
-import { FocusBlockContext } from "./contexts";
+import { useContext } from "react";
+import { FocusHandlerContext, FocusStateContext } from "./contexts";
 
-export const useFocusContext = () => {
-  const context = useContext(FocusBlockContext);
+export const useFocusState = () => {
+  const context = useContext(FocusStateContext);
 
   if (context == null) {
-    throw new Error("useFocusContext must used in FocusProvider");
+    throw new Error("useEditor must be used within a FocusProvider");
   }
 
   return context;
 };
 
-export const useIsFocus = (id?: string) => {
-  const context = useFocusContext();
+export const useFocusHandler = () => {
+  const context = useContext(FocusHandlerContext);
 
-  const currentFocus = useSyncExternalStore(
-    context.subscribe,
-    () => context.focusId,
-  );
+  if (context == null) {
+    throw new Error("useEditor must be used within a FocusProvider");
+  }
 
-  return currentFocus === id;
+  return context;
 };

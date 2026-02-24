@@ -1,17 +1,17 @@
 import { useEffect, useRef } from "react";
-import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
 import { generateId } from "../../../../libs/id/index";
 import { useEditor } from "../../../context/editor/hooks";
+import { useFocusHandler, useFocusState } from "../../../context/focus/hooks";
 
 type Props = {
   id: string;
 };
 
 const ImageEditor = ({ id }: Props) => {
-  const { changeFocus } = useFocusContext();
+  const { setFocusId } = useFocusHandler();
   const { deleteBlock, enter } = useEditor();
 
-  const isFocus = useIsFocus(id);
+  const isFocus = useFocusState() === id;
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const ImageEditor = ({ id }: Props) => {
       const update = generateId();
 
       enter({ next: update, prev: id });
-      changeFocus(update);
+      setFocusId(update);
     }
   };
 
@@ -48,7 +48,7 @@ const ImageEditor = ({ id }: Props) => {
       onKeyDown={handleKeyDown}
       onClick={(e) => {
         e.stopPropagation();
-        changeFocus(id);
+        setFocusId(id);
       }}
       className="absolute inset-0 z-10 outline-none cursor-default"
     />

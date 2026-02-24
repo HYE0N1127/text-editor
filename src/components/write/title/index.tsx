@@ -1,9 +1,9 @@
 import { generateId } from "../../../libs/id/index";
 import { useEditor } from "../../context/editor/hooks";
-import { useFocusContext } from "../../context/focus/hooks";
+import { useFocusHandler } from "../../context/focus/hooks";
 
 const TitleEditor = () => {
-  const { changeFocus } = useFocusContext();
+  const { setFocusId } = useFocusHandler();
   const { enter } = useEditor();
 
   return (
@@ -28,7 +28,7 @@ const TitleEditor = () => {
             e.preventDefault();
             const id = generateId();
 
-            changeFocus(id);
+            setFocusId(id);
             enter({ next: id });
           }
         }}

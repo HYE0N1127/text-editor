@@ -1,13 +1,14 @@
-import { PropsWithChildren, useMemo } from "react";
-import { FocusBlockContext } from "./contexts";
-import { Focus } from "../../../libs/focus/index";
+import { PropsWithChildren, useMemo, useState } from "react";
+import { FocusHandlerContext, FocusStateContext } from "./contexts";
 
-export const IsFocusProvider = ({ children }: PropsWithChildren) => {
-  const focus = useMemo(() => new Focus(), []);
+export const FocusProvider = ({ children }: PropsWithChildren) => {
+  const [focusId, setFocusId] = useState<string | undefined>(undefined);
 
   return (
-    <FocusBlockContext.Provider value={focus}>
-      {children}
-    </FocusBlockContext.Provider>
+    <FocusStateContext.Provider value={focusId}>
+      <FocusHandlerContext.Provider value={{ setFocusId }}>
+        {children}
+      </FocusHandlerContext.Provider>
+    </FocusStateContext.Provider>
   );
 };

@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { TextBlock } from "../../../../type/tree/index";
 import { useBlock, useEditor } from "../../../context/editor/hooks";
-import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
 import { resizeTextarea } from "../text/helpers";
 import { generateId } from "../../../../libs/id/index";
+import { useFocusHandler, useFocusState } from "../../../context/focus/hooks";
 
 type Props = {
   id: string;
@@ -12,8 +12,8 @@ type Props = {
 const BulletEditor = ({ id }: Props) => {
   const editor = useEditor();
   const { block, parentId } = useBlock(id);
-  const { changeFocus } = useFocusContext();
-  const isFocus = useIsFocus(id);
+  const { setFocusId } = useFocusHandler();
+  const isFocus = useFocusState() === id;
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const value = (block as TextBlock).value ?? "";
@@ -55,7 +55,7 @@ const BulletEditor = ({ id }: Props) => {
       };
 
       editor.addChild(id, update, newChildId);
-      changeFocus(newChildId);
+      setFocusId(newChildId);
 
       return;
     }
@@ -65,7 +65,7 @@ const BulletEditor = ({ id }: Props) => {
       const newId = generateId();
 
       editor.enter({ next: newId, prev: id, type: "bullet" });
-      changeFocus(newId);
+      setFocusId(newId);
 
       return;
     }
@@ -81,7 +81,7 @@ const BulletEditor = ({ id }: Props) => {
       const prevId = editor.getPrevId(id);
 
       if (prevId) {
-        changeFocus(prevId);
+        setFocusId(prevId);
       }
 
       editor.deleteBlock(id);
@@ -100,7 +100,7 @@ const BulletEditor = ({ id }: Props) => {
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        onFocus={() => changeFocus(id)}
+        onFocus={() => setFocusId(id)}
         placeholder="내용을 입력해주세요"
         className="block w-full resize-none bg-transparent p-0 text-base leading-6 focus:outline-none placeholder:text-gray-400"
       />

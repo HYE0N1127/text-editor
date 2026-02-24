@@ -1,16 +1,16 @@
 import { generateId } from "../../../libs/id/index";
 import { useEditor } from "../../context/editor/hooks";
-import { useFocusContext } from "../../context/focus/hooks";
+import { useFocusHandler } from "../../context/focus/hooks";
 
 const EditorBlockCreator = () => {
   const { enter, getLastId } = useEditor();
-  const { changeFocus } = useFocusContext();
+  const { setFocusId } = useFocusHandler();
 
   const handleEnter = () => {
     const id = generateId();
     const prev = getLastId();
 
-    changeFocus(id);
+    setFocusId(id);
     enter({ next: id, prev: prev });
   };
 

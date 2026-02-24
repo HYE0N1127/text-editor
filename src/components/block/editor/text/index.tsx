@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { MARKDOWN_RULES } from "../../../../constants/rules";
 import { generateId } from "../../../../libs/id/index";
-import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
 import { getTextStyle, resizeTextarea } from "./helpers";
 import { Block, BlockType } from "../../../../type/tree/index";
 import { useEditor } from "../../../context/editor/hooks";
+import { useFocusHandler, useFocusState } from "../../../context/focus/hooks";
 
 type Props = {
   id: string;
@@ -14,8 +14,8 @@ type Props = {
 
 const TextEditor = ({ id, value, type }: Props) => {
   const { updateBlock, enter, deleteBlock, getPrevId } = useEditor();
-  const { changeFocus } = useFocusContext();
-  const isFocus = useIsFocus(id);
+  const { setFocusId } = useFocusHandler();
+  const isFocus = useFocusState() === id;
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const TextEditor = ({ id, value, type }: Props) => {
 
       const update = generateId();
 
-      changeFocus(update);
+      setFocusId(update);
       enter({ next: update, prev: id });
     }
 
@@ -88,7 +88,7 @@ const TextEditor = ({ id, value, type }: Props) => {
         const prevId = getPrevId(id);
 
         if (prevId != null) {
-          changeFocus(prevId);
+          setFocusId(prevId);
         }
 
         deleteBlock(id);
@@ -103,7 +103,7 @@ const TextEditor = ({ id, value, type }: Props) => {
       value={value}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
-      onFocus={() => changeFocus(id)}
+      onFocus={() => setFocusId(id)}
       placeholder={
         type.startsWith("h")
           ? `제목 ${type.replace("h", "")}`

@@ -2,9 +2,9 @@ import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { useEffect, useRef } from "react";
 import { CodeBlock as CodeBlockType } from "../../../../type/tree/index";
-import { useFocusContext, useIsFocus } from "../../../context/focus/hooks";
 import { generateId } from "../../../../libs/id/index";
 import { useEditor } from "../../../context/editor/hooks";
+import { useFocusHandler, useFocusState } from "../../../context/focus/hooks";
 
 type Props = {
   id: string;
@@ -13,8 +13,8 @@ type Props = {
 
 const CodeEditor = ({ id, block }: Props) => {
   const { updateBlock, enter } = useEditor();
-  const { changeFocus } = useFocusContext();
-  const isFocus = useIsFocus(id);
+  const { setFocusId } = useFocusHandler();
+  const isFocus = useFocusState() === id;
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -61,13 +61,13 @@ const CodeEditor = ({ id, block }: Props) => {
         }}
         className="bg-transparent"
         textareaClassName="focus:outline-none"
-        onFocus={() => changeFocus(id)}
+        onFocus={() => setFocusId(id)}
         onKeyDown={(e) => {
           if (e.key === "Enter" && e.shiftKey) {
             e.preventDefault();
             const created = generateId();
 
-            changeFocus(created);
+            setFocusId(created);
             enter({ next: created, prev: id });
           }
 
