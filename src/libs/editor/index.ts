@@ -3,7 +3,7 @@ import { Block, BlockType, ImageBlock } from "../../type/tree/index";
 import { generateId } from "../id/index";
 import { Node, State } from "../../type/tree/index";
 
-export class MarkdownEditor {
+export class Editor {
   private _state: State;
 
   private readonly blockListeners: Set<() => void> = new Set();
@@ -299,30 +299,30 @@ export class MarkdownEditor {
       return;
     }
 
-    const updateNodes = { ...this._state.nodes };
-    let updateRootIds = [...this._state.rootIds];
+    const update = { ...this._state.nodes };
+    let roots = [...this._state.rootIds];
 
     // 기존 위치에서 activeId를 제거합니다.
     if (activeNode.parentId != null) {
-      const oldParent = updateNodes[activeNode.parentId];
+      const oldParent = update[activeNode.parentId];
 
-      updateNodes[activeNode.parentId] = {
+      update[activeNode.parentId] = {
         ...oldParent,
         childrenIds: oldParent.childrenIds.filter((id) => id !== activeId),
       };
     } else {
-      updateRootIds = updateRootIds.filter((id) => id !== activeId);
+      roots = roots.filter((id) => id !== activeId);
     }
 
     // 이동할 블록의 부모 ID를 타겟 블록의 부모 ID로 변경합니다.
-    updateNodes[activeId] = {
+    update[activeId] = {
       ...activeNode,
       parentId: overNode.parentId,
     };
 
     // 타겟 블록이 속한 배열의 해당 위치에 activeId를 삽입합니다.
     if (overNode.parentId != null) {
-      const updateParent = updateNodes[overNode.parentId];
+      const updateParent = update[overNode.parentId];
       const updateChildrenIds = [...updateParent.childrenIds];
       const insertIndex = updateChildrenIds.indexOf(overId);
 
@@ -330,19 +330,18 @@ export class MarkdownEditor {
         insertIndex !== -1 ? insertIndex : updateChildrenIds.length;
       updateChildrenIds.splice(targetIndex, 0, activeId);
 
-      updateNodes[overNode.parentId] = {
+      update[overNode.parentId] = {
         ...updateParent,
         childrenIds: updateChildrenIds,
       };
     } else {
-      const insertIndex = updateRootIds.indexOf(overId);
-      const targetIndex =
-        insertIndex !== -1 ? insertIndex : updateRootIds.length;
+      const insertIndex = roots.indexOf(overId);
+      const targetIndex = insertIndex !== -1 ? insertIndex : roots.length;
 
-      updateRootIds.splice(targetIndex, 0, activeId);
+      roots.splice(targetIndex, 0, activeId);
     }
 
-    this.state = { nodes: updateNodes, rootIds: updateRootIds };
+    this.state = { nodes: update, rootIds: roots };
   };
 
   public subscribe = (listener: () => void) => {

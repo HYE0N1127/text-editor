@@ -1,6 +1,6 @@
 import { createContext } from "react";
-import { MarkdownEditor } from "../../../libs/editor/index";
+import { Editor } from "../../../libs/editor/index";
 
-export const MarkdownEditorContext = createContext<MarkdownEditor | undefined>(
+export const MarkdownEditorContext = createContext<Editor | undefined>(
   undefined,
 );
