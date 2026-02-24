@@ -5,17 +5,17 @@ export const useFocusState = () => {
   const context = useContext(FocusStateContext);
 
   if (context == null) {
-    throw new Error("useEditor must be used within a FocusProvider");
+    throw new Error("useFocusState must be used within a FocusProvider");
   }
 
-  return context;
+  return context.focusId;
 };
 
 export const useFocusHandler = () => {
   const context = useContext(FocusHandlerContext);
 
   if (context == null) {
-    throw new Error("useEditor must be used within a FocusProvider");
+    throw new Error("useFocusHandler must be used within a FocusProvider");
   }
 
   return context;
