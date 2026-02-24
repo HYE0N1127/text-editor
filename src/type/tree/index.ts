@@ -29,14 +29,6 @@ export type CodeBlock = {
   language: string;
 };
 
-export type BlockType =
-  | "text"
-  | "image"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "code"
-  | "quote"
-  | "bullet";
-
 export type Block = TextBlock | ImageBlock | CodeBlock;
+
+export type BlockType = Block["type"];
