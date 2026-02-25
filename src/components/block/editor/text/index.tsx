@@ -5,6 +5,7 @@ import { getTextStyle, resizeTextarea } from "./helpers";
 import { Block, BlockType } from "../../../../type/tree/index";
 import { useEditor } from "../../../context/editor/hooks";
 import { useFocusHandler, useFocusState } from "../../../context/focus/hooks";
+import { renderFormattedText } from "./styles";
 
 type Props = {
   id: string;
@@ -96,21 +97,29 @@ const TextEditor = ({ id, value, type }: Props) => {
     }
   };
 
+  const sharedClasses = `block w-full p-0 break-words whitespace-pre-wrap ${getTextStyle(type)}`;
+
   return (
-    <textarea
-      ref={textareaRef}
-      rows={1}
-      value={value}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      onFocus={() => setFocusId(id)}
-      placeholder={
-        type.startsWith("h")
-          ? `제목 ${type.replace("h", "")}`
-          : "내용을 입력하세요..."
-      }
-      className={`block w-full resize-none bg-transparent p-0 focus:outline-none placeholder:text-gray-400 ${getTextStyle(type)}`}
-    />
+    <div className="relative w-full">
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 pointer-events-none text-[#D4D4D4] ${sharedClasses}`}
+      >
+        {renderFormattedText(value)}
+      </div>
+
+      <textarea
+        ref={textareaRef}
+        rows={1}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onFocus={() => setFocusId(id)}
+        placeholder="내용을 입력하세요"
+        spellCheck={false}
+        className={`relative z-10 resize-none bg-transparent text-transparent caret-[#D4D4D4] focus:outline-none placeholder:text-gray-400 ${sharedClasses}`}
+      />
+    </div>
   );
 };
 
