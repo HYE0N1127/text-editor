@@ -11,14 +11,18 @@
 const MARKDOWN_REGEX = /(\*\*.*?\*\*|__.*?__|~~.*?~~|_[^_]+_|\[.*?\]\(.*?\))/g;
 
 export const renderFormattedText = (text: string) => {
-  if (!text) return null;
+  if (text == null) {
+    return null;
+  }
 
   const parts = text.split(MARKDOWN_REGEX);
 
   return parts.map((part, index) => {
-    if (!part) return null;
+    if (part == null) {
+      return null;
+    }
 
-    // bold (최소 길이 5)
+    // bold : **text**
     if (part.length >= 5 && part.startsWith("**") && part.endsWith("**")) {
       return (
         <span key={index} className="font-bold text-white">
@@ -27,7 +31,7 @@ export const renderFormattedText = (text: string) => {
       );
     }
 
-    // underline (최소 길이 5)
+    // underline : __text__
     if (part.length >= 5 && part.startsWith("__") && part.endsWith("__")) {
       return (
         <span key={index} className="underline underline-offset-4 text-white">
@@ -36,7 +40,7 @@ export const renderFormattedText = (text: string) => {
       );
     }
 
-    // middle-line (최소 길이 5)
+    // middle-line : ~~text~~
     if (part.length >= 5 && part.startsWith("~~") && part.endsWith("~~")) {
       return (
         <span key={index} className="line-through text-white">
@@ -45,7 +49,7 @@ export const renderFormattedText = (text: string) => {
       );
     }
 
-    // Italic (최소 길이 3)
+    // Italic : _text_
     if (part.length >= 3 && part.startsWith("_") && part.endsWith("_")) {
       return (
         <span key={index} className="italic text-white">

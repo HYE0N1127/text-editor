@@ -101,7 +101,6 @@ const BulletEditor = ({ id }: Props) => {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onFocus={() => setFocusId(id)}
-        placeholder="내용을 입력해주세요"
         className="block w-full resize-none bg-transparent p-0 text-base leading-6 focus:outline-none placeholder:text-gray-400"
       />
     </div>
