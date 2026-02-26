@@ -16,16 +16,20 @@ type Props = {
 const TextEditor = ({ id, value, type }: Props) => {
   const { updateBlock, enter, deleteBlock, getPrevId } = useEditor();
   const { setFocusId } = useFocusHandler();
+
   const isFocus = useFocusState() === id;
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    resizeTextarea(textareaRef.current);
-  }, [value]);
+    if (isFocus) {
+      resizeTextarea(textareaRef.current);
+    }
+  }, [value, isFocus]);
 
   useEffect(() => {
     if (isFocus && textareaRef.current) {
       const element = textareaRef.current;
+
       if (document.activeElement !== element) {
         element.focus();
 
@@ -50,11 +54,7 @@ const TextEditor = ({ id, value, type }: Props) => {
           return;
         }
 
-        updateBlock(id, {
-          type: ruleType,
-          value: text.slice(prefix.length),
-        });
-
+        updateBlock(id, { type: ruleType, value: text.slice(prefix.length) });
         return;
       }
     }
@@ -82,10 +82,8 @@ const TextEditor = ({ id, value, type }: Props) => {
         updateBlock(id, { type: "text" });
         return;
       }
-
       if (type === "text") {
         e.preventDefault();
-
         const prevId = getPrevId(id);
 
         if (prevId != null) {
@@ -100,25 +98,35 @@ const TextEditor = ({ id, value, type }: Props) => {
   const sharedClasses = `block w-full p-0 break-words whitespace-pre-wrap ${getTextStyle(type)}`;
 
   return (
-    <div className="relative w-full">
-      <div
-        aria-hidden="true"
-        className={`absolute inset-0 pointer-events-none text-[#D4D4D4] ${sharedClasses}`}
-      >
-        {renderFormattedText(value)}
-      </div>
-
-      <textarea
-        ref={textareaRef}
-        rows={1}
-        value={value}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        onFocus={() => setFocusId(id)}
-        placeholder="내용을 입력하세요"
-        spellCheck={false}
-        className={`relative z-10 resize-none bg-transparent text-transparent caret-[#D4D4D4] focus:outline-none placeholder:text-gray-400 ${sharedClasses}`}
-      />
+    <div
+      className="relative w-full min-h-[1.5em]"
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (!isFocus && target.tagName.toLowerCase() !== "a") {
+          setFocusId(id);
+        }
+      }}
+    >
+      {isFocus ? (
+        <textarea
+          ref={textareaRef}
+          rows={1}
+          value={value}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          placeholder="내용을 입력하세요"
+          spellCheck={false}
+          className={`resize-none bg-transparent text-[#D4D4D4] caret-white focus:outline-none placeholder:text-gray-400 ${sharedClasses}`}
+        />
+      ) : (
+        <div className={`text-[#D4D4D4] cursor-text ${sharedClasses}`}>
+          {value === "" ? (
+            <span className="text-gray-400">내용을 입력하세요</span>
+          ) : (
+            renderFormattedText(value)
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -11,72 +11,66 @@
 const MARKDOWN_REGEX = /(\*\*.*?\*\*|__.*?__|~~.*?~~|_[^_]+_|\[.*?\]\(.*?\))/g;
 
 export const renderFormattedText = (text: string) => {
-  if (text == null) {
-    return null;
-  }
+  if (!text) return null;
 
   const parts = text.split(MARKDOWN_REGEX);
 
   return parts.map((part, index) => {
-    // bold - **Text**
-    if (part.startsWith("**") && part.endsWith("**")) {
+    if (!part) return null;
+
+    // bold (최소 길이 5)
+    if (part.length >= 5 && part.startsWith("**") && part.endsWith("**")) {
       return (
-        <span key={index}>
-          <span className="text-transparent hidden select-none">**</span>
-          <span className="font-bold text-white">{part.slice(2, -2)}</span>
-          <span className="text-transparent hidden select-none">**</span>
+        <span key={index} className="font-bold text-white">
+          {part.slice(2, -2)}
         </span>
       );
     }
 
-    // underline - __Text__
-    if (part.startsWith("__") && part.endsWith("__")) {
+    // underline (최소 길이 5)
+    if (part.length >= 5 && part.startsWith("__") && part.endsWith("__")) {
       return (
-        <span key={index}>
-          <span className="text-transparent hidden select-none">__</span>
-          <span className="underline underline-offset-4 text-white">
-            {part.slice(2, -2)}
-          </span>
-          <span className="text-transparent hidden select-none">__</span>
+        <span key={index} className="underline underline-offset-4 text-white">
+          {part.slice(2, -2)}
         </span>
       );
     }
 
-    // middle-line - ~~Text~~
-    if (part.startsWith("~~") && part.endsWith("~~")) {
+    // middle-line (최소 길이 5)
+    if (part.length >= 5 && part.startsWith("~~") && part.endsWith("~~")) {
       return (
-        <span key={index}>
-          <span className="text-transparent hidden select-none">~~</span>
-          <span className="line-through text-white">{part.slice(2, -2)}</span>
-          <span className="text-transparent hidden select-none">~~</span>
+        <span key={index} className="line-through text-white">
+          {part.slice(2, -2)}
         </span>
       );
     }
 
-    // Italic - _Text_
-    if (part.startsWith("_") && part.endsWith("_")) {
+    // Italic (최소 길이 3)
+    if (part.length >= 3 && part.startsWith("_") && part.endsWith("_")) {
       return (
-        <span key={index}>
-          <span className="text-transparent hidden select-none">_</span>
-          <span className="italic text-white">{part.slice(1, -1)}</span>
-          <span className="text-transparent hidden select-none">_</span>
+        <span key={index} className="italic text-white">
+          {part.slice(1, -1)}
         </span>
       );
     }
 
-    // Hyperlink - [Text](link)
+    // Hyperlink
     const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
     if (linkMatch != null) {
       return (
-        <span key={index}>
-          <span className="text-transparent hidden select-none">[</span>
-          <span className="text-blue-400 underline">{linkMatch[1]}</span>
-          <span className="text-transparent hidden select-none">{`](${linkMatch[2]})`}</span>
-        </span>
+        <a
+          key={index}
+          href={linkMatch[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 underline cursor-pointer hover:text-gray-300"
+        >
+          {linkMatch[1]}
+        </a>
       );
     }
 
-    // normal
+    // normal text
     return <span key={index}>{part}</span>;
   });
 };
