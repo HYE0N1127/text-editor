@@ -19,7 +19,7 @@ Image: 마크다운 이미지 삽입 지원
 
 Code Block: ```를 사용한 코드 구문 강조 및 블록 생성
 
-### 🛠 Tech Stack
+### Tech Stack
 Frontend
 - React.js
 - Typescript
